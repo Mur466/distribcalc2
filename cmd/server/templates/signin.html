@@ -1,0 +1,35 @@
+<!--embedding the header file-->
+{{ template "header.html" .}}
+
+    <form action="/signin" method="POST">
+        <!-- Username input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+          <input type="text" id="form2Example1" class="form-control" name="Username" value="{{.Username}}"/>
+          <label class="form-label" for="form2Example1">User name</label>
+        </div>
+      
+        <!-- Password input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+          <input type="password" id="form2Example2" class="form-control" name="Password"/>
+          <label class="form-label" for="form2Example2">Password</label>
+        </div>
+      
+        <!-- Submit button -->
+        <a href="/signin">
+            <button type="submit" value="SignIn" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">Sign in</button>
+        </a>
+
+        {{if .Message}}
+        <div class="alert alert-danger" role="alert">
+            {{.Message}}
+        </div>
+        {{end}}
+    
+        <!-- Register buttons -->
+        <div class="text-center">
+          <p>Not a member? <a href="/register">Register</a></p>
+        </div>
+      </form>
+
+<!--embedding the footer file-->
+{{ template "footer.html" .}}
