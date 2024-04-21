@@ -1,6 +1,7 @@
 package agent
 
 import (
+	"sync"
 	"time"
 
 	"github.com/Mur466/distribcalc/v2/internal/cfg"
@@ -10,15 +11,17 @@ import (
 )
 
 type Agent struct {
-	AgentId    string `json:"agent_id"`
-	Status     string `json:"status"`
-	TotalProcs int    `json:"total_procs"`
-	IdleProcs  int    `json:"idle_procs"`
+	AgentId    string 
+	Status     string 
+	TotalProcs int    
+	IdleProcs  int    
 	FirstSeen  time.Time
 	LastSeen   time.Time
+	Verbose    string
 }
 
-var Agents map[string]Agent = make(map[string]Agent)
+var Agents map[string]*Agent = make(map[string]*Agent)
+var mx sync.Mutex
 
 // Удаляем пропавших агентов
 func CleanLostAgents() {
@@ -43,7 +46,9 @@ func CleanLostAgents() {
 				}
 			}
 			// нет больше такого агента
+			mx.Lock()
 			delete(Agents, a.AgentId)
+			mx.Unlock()
 		}
 	}
 }
@@ -60,17 +65,49 @@ func InitAgents() {
 
 }
 
+func NewAgent(AgentId string) *Agent {
+	return &Agent{
+		AgentId:    AgentId,
+		TotalProcs: 0,
+		IdleProcs:  0,
+		FirstSeen:  time.Now(),
+		LastSeen:   time.Now(),
+	}
+}
+
+func AgentSeen(AgentId string) *Agent {
+
+	mx.Lock()
+	defer mx.Unlock()
+	thisagent, found := Agents[AgentId]
+	if !found {
+		// инициализиуем
+		thisagent = NewAgent(AgentId)
+	}
+	thisagent.LastSeen = time.Now()
+	Agents[AgentId] = thisagent
+	return thisagent
+
+}
+
+func AgentUpdate(a *Agent)  {
+
+	mx.Lock()
+	defer mx.Unlock()
+	Agents[a.AgentId] = a	
+
+}
+
 func (a *Agent) FirstSeenFmt() string {
 	if a.FirstSeen.IsZero() {
-		return "N/A"
+		return "no info"
 	}
 	return a.FirstSeen.Format("2006-01-02 15:04:05")
 }
 
 func (a *Agent) LastSeenFmt() string {
 	if a.LastSeen.IsZero() {
-		return "N/A"
+		return "no info"
 	}
-	//return a.LastSeen.Format("2006-01-02 15:04:05")
-	return "haha"
+	return a.LastSeen.Format("2006-01-02 15:04:05")
 }

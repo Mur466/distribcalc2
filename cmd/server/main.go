@@ -1,12 +1,18 @@
 package main
 
 import (
+	"net/http"
+	"os"
+	"os/signal"
 	"strconv"
+	"syscall"
 
 	"github.com/Mur466/distribcalc/v2/internal/agent"
 	"github.com/Mur466/distribcalc/v2/internal/cfg"
 	"github.com/Mur466/distribcalc/v2/internal/db"
+	"github.com/Mur466/distribcalc/v2/internal/grpc/grpcapp"
 	"github.com/Mur466/distribcalc/v2/internal/logger"
+	l "github.com/Mur466/distribcalc/v2/internal/logger"
 	"github.com/Mur466/distribcalc/v2/internal/routers"
 	"github.com/Mur466/distribcalc/v2/internal/storage_pg"
 	"github.com/Mur466/distribcalc/v2/internal/task"
@@ -29,9 +35,34 @@ func main() {
 //	repo := storage_fake.New()
 	repo := storage_pg.New(myconfig)
 	defer repo.Stop()
-
+	
 	router := routers.InitRouters(repo, myconfig)
-	router.Run(":" + strconv.Itoa(cfg.Cfg.HttpPort))
+	httpaddr :=":" + strconv.Itoa(cfg.Cfg.HttpPort)
+	go func() {
+		router.Run(httpaddr)
+	}()
+
+	// gRPC сервер
+	grpcApp := grpcapp.New(myconfig)
+	go func() {
+		grpcApp.MustRun()
+	}()
+
+	// Graceful shutdown
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, syscall.SIGTERM, syscall.SIGINT)
+
+	<-stop
+	// остановим http
+	routers.GracefulShutdown(&http.Server{
+        Addr:    httpaddr, // Use the appropriate port
+        Handler: router,
+    })
+	// остановим grpc
+	grpcApp.Stop()
+	l.Logger.Info("Gracefully stopped")
+
+
 }
 
 /*

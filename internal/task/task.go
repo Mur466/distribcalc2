@@ -16,22 +16,22 @@ import (
 )
 
 type Node struct {
-	Node_id        int `json:"node_id"`
+	Node_id        int 
 	Task_id        int
 	Parent_node_id int
 	Child1_node_id int
 	Child2_node_id int
-	Operand1       int    `json:"operand1"`
-	Operand2       int    `json:"operand2"`
-	Operator       string `json:"operator"`
-	Operator_delay int    `json:"operator_delay"`
-	Status         string `json:"status"` // (parsing, "error", waiting - ждем результатов других выражений, ready - оба операнда вычислены, in progress - передано в расчет, done - есть результат)
-	Message        string `json:"message"`
+	Operand1       int    
+	Operand2       int    
+	Operator       string 
+	Operator_delay int    
+	Status         string  // (parsing, "error", waiting - ждем результатов других выражений, ready - оба операнда вычислены, in progress - передано в расчет, done - есть результат)
+	Message        string 
 	Date_ins       time.Time
 	Date_start     time.Time
 	Date_done      time.Time
-	Agent_id       string `json:"agent_id"`
-	Result         int64  `json:"result"`
+	Agent_id       string 
+	Result         int64  
 }
 
 type NodeStatusInfo struct {
@@ -265,7 +265,7 @@ func (t *Task) SetStatus(status string, info TaskStatusInfo) {
 		t.Message = fmt.Sprintf("Calculation failed. Error = %v", info.Message)
 		t.DateFinished = time.Now()
 		t.Status = "error"
-		l.Logger.Error("Task failed",
+		l.Logger.Info("Task failed",
 			zap.Int("task_id", t.Task_id),
 			zap.String("message", info.Message),
 		)
@@ -393,14 +393,14 @@ func GetOperatorDelay(operator string) int {
 
 func (t *Task) DateCreatedFmt() string {
 	if t.DateCreated.IsZero() {
-		return "N/A"
+		return "no info"
 	}
 	return t.DateCreated.Format("2006/01/02 15:04:05")
 }
 
 func (t *Task) DateFinishedFmt() string {
 	if t.DateFinished.IsZero() {
-		return "N/A"
+		return "no info"
 	}
 	return t.DateFinished.Format("2006/01/02 15:04:05")
 }

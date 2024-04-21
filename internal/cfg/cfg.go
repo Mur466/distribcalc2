@@ -19,6 +19,7 @@ type Config struct {
 	AgentLostTimeout int
 	Secret		string
 	AuthTTL		int
+	GrpcPort	int
 }
 
 var Cfg Config
@@ -28,21 +29,22 @@ func InitConfig() {
 	flag.StringVar(&Cfg.Dbhost, "dbhost", "localhost", "Postgress host")
 	flag.StringVar(&Cfg.Dbuser, "dbuser", "postgres", "Postgress user")
 	flag.StringVar(&Cfg.Dbpassword, "dbpassword", "postgres", "Postgress password")
-	flag.IntVar(&Cfg.Dbport, "dbport", 5432, "Posgress port")
+	flag.IntVar(&Cfg.Dbport, "dbport", 5432, "Posgress port to connect")
 	flag.StringVar(&Cfg.Dbname, "dbname", "distribcalc", "Postgress database name")
-	flag.IntVar(&Cfg.HttpPort, "httppport", 8080, "HTTP port to listen to")
+	flag.IntVar(&Cfg.HttpPort, "httppport", 8080, "HTTP port to listen")
 	flag.IntVar(&Cfg.AgentLostTimeout, "agenttimeout", 60, "Timeout before agent considered lost (seconds)")
 	flag.StringVar(&Cfg.Secret, "secret", "abrakadabra", "JWT auth secret")
 	flag.IntVar(&Cfg.AuthTTL, "authttl", 3600, "Timeout for auth token (seconds)")
+	flag.IntVar(&Cfg.GrpcPort, "grpcport", 9090, "gRPC port to listen")
 
 	flag.Parse()
 
-	Cfg.DelayForAdd = 10
-	Cfg.DelayForSub = 12
-	Cfg.DelayForMul = 15
-	Cfg.DelayForDiv = 20
+	Cfg.DelayForAdd = 30
+	Cfg.DelayForSub = 35
+	Cfg.DelayForMul = 40
+	Cfg.DelayForDiv = 45
 
-	Cfg.RowsOnPage = 10
+	Cfg.RowsOnPage = 15
 }
 
 func RecalcAgentTimeout() {

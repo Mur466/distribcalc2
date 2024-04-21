@@ -1,7 +1,12 @@
 package routers
 
 import (
+	"context"
+	"net/http"
+	"time"
+
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 
 	"github.com/Mur466/distribcalc/v2/internal/cfg"
 	"github.com/Mur466/distribcalc/v2/internal/handlers"
@@ -11,6 +16,7 @@ import (
 	calculateexpression "github.com/Mur466/distribcalc/v2/internal/handlers/calculate_expression"
 	"github.com/Mur466/distribcalc/v2/internal/logger"
 	"github.com/Mur466/distribcalc/v2/internal/middlewares"
+	l "github.com/Mur466/distribcalc/v2/internal/logger"
 )
 
 // общий интерфейс для всех repo, которые мы передаем в хендлеры
@@ -27,10 +33,10 @@ func InitRouters(repo repo, cfg *cfg.Config) *gin.Engine {
 	router.Use(middlewares.LoggerMiddleware(logger.Logger), gin.Recovery())
 	router.LoadHTMLGlob("templates/*")
 
-
+	/*
 	router.POST("/give-me-operation", handlers.GiveMeOperation)
 	router.POST("/take-operation-result", handlers.TakeOperationResult)
-	
+	*/
 	
 	router.POST("/set-config", handlers.SetConfig)
 	
@@ -51,5 +57,18 @@ func InitRouters(repo repo, cfg *cfg.Config) *gin.Engine {
 
 	return router
 
+}
+
+func GracefulShutdown(server *http.Server) {
+    // Create a timeout context for the shutdown process
+    ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+    defer cancel()
+
+    // Shutdown the server gracefully
+    if err := server.Shutdown(ctx); err != nil {
+		l.Logger.Error("http server forced to shutdown",zap.Error(err))
+    }
+
+	l.Logger.Info("http server exiting")
 }
 

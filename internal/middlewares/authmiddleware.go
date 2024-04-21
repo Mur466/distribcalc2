@@ -22,7 +22,7 @@ type Repo interface {
 
 func AuthMiddleware(secret string, repo Repo) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		l.SLogger.Info("Authmiddleware")
+		l.SLogger.Debug("Authmiddleware")
 		var tokenString, username string
 		frombrowser := c.GetHeader("Content-Type") != "application/json"
 		if frombrowser {

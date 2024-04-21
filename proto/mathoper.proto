@@ -1,0 +1,48 @@
+syntax = "proto3"; // версия proto файлов
+package mathoper; // название пакета
+option go_package = "github.com/Mur466/distribcalc/v2/proto";
+
+
+// Сообщение - запрос от агента на получение новой операции
+message OperRequest {
+    string agent_id = 1; // числа здесь - порядок полей в сообщении
+}
+
+// Сообщение - арифметическая операция для выполнения агентом
+message OperResponse {
+    int32  task_id  = 1;
+    int32  node_id  = 2;
+    int32  operand1 = 3;
+    int32  operand2 = 4;
+    string operator = 5;
+    int32  operator_delay = 6;
+}
+
+// Сообщение - результат выполнения арифметической операции
+message OperResultRequest {
+    string agent_id = 1;
+    int32  task_id  = 2;
+    int32  node_id  = 3;
+    string status   = 4;
+    int64  result   = 5;
+    string message  = 6;
+
+}
+// Сообшение от агента с описанием его статуса
+message AgentStatusRequest {
+    string agent_id = 1;
+    string status   = 2;
+    int32    total_procs = 3;
+    int32    idle_procs = 4;
+    string verbose = 5;    
+}
+
+message Empty {}
+
+// Определение сервиса 
+service MathOperService {
+	// методы, которые можно будет реализовать и использовать 
+    rpc Oper (OperRequest) returns (OperResponse); 
+    rpc OperResult (OperResultRequest) returns (Empty);
+    rpc AgentStatus (AgentStatusRequest) returns (Empty);
+}
