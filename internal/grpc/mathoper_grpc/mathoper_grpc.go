@@ -21,7 +21,7 @@ func NewServer() *Server {
 }
 
 func (s *Server) Oper(ctx context.Context, in *pb.OperRequest) (*pb.OperResponse, error) {
-	l.Logger.Info("RPC call Oper", zap.String("AgentId", in.AgentId))
+	l.Logger.Debug("RPC call Oper", zap.String("AgentId", in.AgentId))
 
 	if in.AgentId == "" {
 		return nil, errors.ErrInvalidInput
@@ -37,11 +37,11 @@ func (s *Server) Oper(ctx context.Context, in *pb.OperRequest) (*pb.OperResponse
 				Operand2:      int32(n.Operand2),
 				Operator:      n.Operator,
 				OperatorDelay: int32(n.Operator_delay)}
-			l.SLogger.Infof("agent %v received operation %+v", thisagent.AgentId, &res)
+			l.SLogger.Infof("Responce to agent %v with operation %+v", thisagent.AgentId, &res)
 			return &res, nil
 		}
 	}
-	l.SLogger.Infof("agent %v received empty operation ", thisagent.AgentId)
+	l.SLogger.Debugf("Responce to agent %v with empty operation ", thisagent.AgentId)
 	return &pb.OperResponse{}, nil
 }
 

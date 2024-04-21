@@ -33,11 +33,6 @@ func InitRouters(repo repo, cfg *cfg.Config) *gin.Engine {
 	router.Use(middlewares.LoggerMiddleware(logger.Logger), gin.Recovery())
 	router.LoadHTMLGlob("templates/*")
 
-	/*
-	router.POST("/give-me-operation", handlers.GiveMeOperation)
-	router.POST("/take-operation-result", handlers.TakeOperationResult)
-	*/
-	
 	router.POST("/set-config", handlers.SetConfig)
 	
 	router.GET("/signin", signin.MakeHandlerGet())

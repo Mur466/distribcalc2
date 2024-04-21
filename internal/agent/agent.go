@@ -11,10 +11,10 @@ import (
 )
 
 type Agent struct {
-	AgentId    string 
-	Status     string 
-	TotalProcs int    
-	IdleProcs  int    
+	AgentId    string
+	Status     string
+	TotalProcs int
+	IdleProcs  int
 	FirstSeen  time.Time
 	LastSeen   time.Time
 	Verbose    string
@@ -83,6 +83,7 @@ func AgentSeen(AgentId string) *Agent {
 	if !found {
 		// инициализиуем
 		thisagent = NewAgent(AgentId)
+		l.SLogger.Infof("Registered new agent id: %v", thisagent.AgentId)
 	}
 	thisagent.LastSeen = time.Now()
 	Agents[AgentId] = thisagent
@@ -90,11 +91,11 @@ func AgentSeen(AgentId string) *Agent {
 
 }
 
-func AgentUpdate(a *Agent)  {
+func AgentUpdate(a *Agent) {
 
 	mx.Lock()
 	defer mx.Unlock()
-	Agents[a.AgentId] = a	
+	Agents[a.AgentId] = a
 
 }
 

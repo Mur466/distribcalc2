@@ -1,16 +1,17 @@
 version: "3.8"
 services:
   server:
-    container_name: distribcalc.server
+    container_name: distribcalc2.server
     build: 
         context: .
         dockerfile: server.dockerfile
     restart: unless-stopped
     depends_on:
-      distribcalc.storage:
+      distribcalc2.storage:
         condition: service_healthy
     ports:
       - "8080:8080"
+      - "9090:9089"
     develop:
       watch:
         - path: ./*.go
@@ -20,7 +21,7 @@ services:
           action: sync
 
   agent1:
-    container_name: distribcalc.agent1
+    container_name: distribcalc2.agent1
     build: 
         context: .
         dockerfile: agent.dockerfile
@@ -30,7 +31,7 @@ services:
          condition: service_started
 
   agent2:
-    container_name: distribcalc.agent2
+    container_name: distribcalc2.agent2
     build: 
         context: .
         dockerfile: agent.dockerfile
@@ -39,14 +40,14 @@ services:
       server:
          condition: service_started
   
-  distribcalc.storage:
-    container_name: distribcalc.storage
+  distribcalc2.storage:
+    container_name: distribcalc2.storage
     image: postgres:16.2
     restart: unless-stopped
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
-      POSTGRES_DB: distribcalc
+      POSTGRES_DB: distribcalc2
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s

@@ -16,4 +16,4 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o ./cmd/server/server ./cmd/server
 #EXPOSE 8080
 
 WORKDIR /app/cmd/server
-CMD ["./server","-dbhost", "distribcalc.storage"]
+CMD ["./server","-dbhost", "distribcalc2.storage"]

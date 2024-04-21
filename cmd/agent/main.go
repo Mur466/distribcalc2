@@ -82,7 +82,7 @@ func (m *Monitor) List() string {
 	return res
 }
 
-func Worker(ch_oper chan *pb.OperResponse, ch_idle chan interface{}, wg *sync.WaitGroup) {
+func Worker(ch_oper <-chan *pb.OperResponse, ch_idle chan<- interface{}, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	for oper := range ch_oper {
@@ -98,8 +98,9 @@ func Worker(ch_oper chan *pb.OperResponse, ch_idle chan interface{}, wg *sync.Wa
 				monitor.Unregister(thisid)
 				// отправляем статус
 				SendHeartbeat()
-				// готовы к новой операции не дожидаясь таймаута
-				ch_idle <- struct{}{}
+				// посылаем сигнал, что готовы к новой операции, не дожидаясь таймера
+				// в горутине, чтобы избежать deadlock
+				go func() { ch_idle <- struct{}{} }()
 			}()
 
 			// вычисляем
@@ -175,7 +176,7 @@ func SendHeartbeat() {
 	var status string
 	switch {
 	case free_workers == 0:
-		status = "overload"
+		status = "load 100%"
 	case free_workers == config.max_workers:
 		status = "idle"
 	default:
@@ -196,12 +197,12 @@ func SendHeartbeat() {
 
 }
 
-func DinDon(choper chan<- *pb.OperResponse) {
+func DinDon(ch_oper chan<- *pb.OperResponse) {
 	// набираем до упора
 	for config.max_workers > monitor.Count() {
 		if oper, ok := GetOperation(); ok {
 			// тут отправить операцию воркеру
-			choper <- oper
+			ch_oper <- oper
 		} else {
 			// не дали операцию, выходим из цикла
 			break
@@ -210,27 +211,27 @@ func DinDon(choper chan<- *pb.OperResponse) {
 	SendHeartbeat()
 }
 
-func TaskChecker(choper chan<- *pb.OperResponse, ch_idle <-chan interface{}, ch_stop <-chan interface{}) {
+func TaskChecker(ch_oper chan<- *pb.OperResponse, ch_idle <-chan interface{}, ch_stop <-chan interface{}) {
 	tick := time.NewTicker(time.Duration(config.poll_interval) * time.Second)
 	go func() {
 		for {
 			select {
 			case <-tick.C:
 				// таймер прозвенел
-				DinDon(choper)
+				DinDon(ch_oper)
 			case <-ch_idle:
 				// какой-то воркер освободился
-				DinDon(choper)
+				DinDon(ch_oper)
 			case <-ch_stop:
 				tick.Stop()
-				close(choper)
+				close(ch_oper)
 				return
 			}
 		}
 
 	}()
 	// первый раз не ждем таймера
-	DinDon(choper)
+	DinDon(ch_oper)
 }
 
 var config = NewConfig()
