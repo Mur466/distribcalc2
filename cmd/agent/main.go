@@ -14,8 +14,8 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
-	"github.com/Mur466/distribcalc/v2/internal/utils"
-	pb "github.com/Mur466/distribcalc/v2/proto"
+	"github.com/Mur466/distribcalc2/internal/utils"
+	pb "github.com/Mur466/distribcalc2/proto"
 )
 
 type Config struct {

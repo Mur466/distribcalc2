@@ -7,15 +7,15 @@ import (
 	"strconv"
 	"syscall"
 
-	"github.com/Mur466/distribcalc/v2/internal/agent"
-	"github.com/Mur466/distribcalc/v2/internal/cfg"
-	"github.com/Mur466/distribcalc/v2/internal/db"
-	"github.com/Mur466/distribcalc/v2/internal/grpc/grpcapp"
-	"github.com/Mur466/distribcalc/v2/internal/logger"
-	l "github.com/Mur466/distribcalc/v2/internal/logger"
-	"github.com/Mur466/distribcalc/v2/internal/routers"
-	"github.com/Mur466/distribcalc/v2/internal/storage_pg"
-	"github.com/Mur466/distribcalc/v2/internal/task"
+	"github.com/Mur466/distribcalc2/internal/agent"
+	"github.com/Mur466/distribcalc2/internal/cfg"
+	"github.com/Mur466/distribcalc2/internal/db"
+	"github.com/Mur466/distribcalc2/internal/grpc/grpcapp"
+	"github.com/Mur466/distribcalc2/internal/logger"
+	l "github.com/Mur466/distribcalc2/internal/logger"
+	"github.com/Mur466/distribcalc2/internal/routers"
+	"github.com/Mur466/distribcalc2/internal/storage_pg"
+	"github.com/Mur466/distribcalc2/internal/task"
 )
 
 func main() {
@@ -32,12 +32,12 @@ func main() {
 
 	agent.InitAgents()
 
-//	repo := storage_fake.New()
+	//	repo := storage_fake.New()
 	repo := storage_pg.New(myconfig)
 	defer repo.Stop()
-	
+
 	router := routers.InitRouters(repo, myconfig)
-	httpaddr :=":" + strconv.Itoa(cfg.Cfg.HttpPort)
+	httpaddr := ":" + strconv.Itoa(cfg.Cfg.HttpPort)
 	go func() {
 		router.Run(httpaddr)
 	}()
@@ -55,13 +55,12 @@ func main() {
 	<-stop
 	// остановим http
 	routers.GracefulShutdown(&http.Server{
-        Addr:    httpaddr, // Use the appropriate port
-        Handler: router,
-    })
+		Addr:    httpaddr, // Use the appropriate port
+		Handler: router,
+	})
 	// остановим grpc
 	grpcApp.Stop()
 	l.Logger.Info("Gracefully stopped")
-
 
 }
 

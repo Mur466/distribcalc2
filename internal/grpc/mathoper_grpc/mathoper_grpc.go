@@ -3,11 +3,11 @@ package mathoper_grpc
 import (
 	"context"
 
-	"github.com/Mur466/distribcalc/v2/internal/agent"
-	"github.com/Mur466/distribcalc/v2/internal/errors"
-	l "github.com/Mur466/distribcalc/v2/internal/logger"
-	"github.com/Mur466/distribcalc/v2/internal/task"
-	pb "github.com/Mur466/distribcalc/v2/proto"
+	"github.com/Mur466/distribcalc2/internal/agent"
+	"github.com/Mur466/distribcalc2/internal/errors"
+	l "github.com/Mur466/distribcalc2/internal/logger"
+	"github.com/Mur466/distribcalc2/internal/task"
+	pb "github.com/Mur466/distribcalc2/proto"
 	"go.uber.org/zap"
 )
 

@@ -1,11 +1,11 @@
 package calculateexpression
 
-import "github.com/Mur466/distribcalc/v2/internal/entities"
+import "github.com/Mur466/distribcalc2/internal/entities"
 
 type ExtExpr struct {
-	Ext_id  string `json:"ext_id"`
-	Expr    string `json:"expr"`
-	User	*entities.User
+	Ext_id string `json:"ext_id"`
+	Expr   string `json:"expr"`
+	User   *entities.User
 }
 
 type ExprResult struct {

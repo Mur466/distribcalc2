@@ -6,8 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 
-	
-	l "github.com/Mur466/distribcalc/v2/internal/logger"
+	l "github.com/Mur466/distribcalc2/internal/logger"
 )
 
 func MakeHandlerPost(s *Service) func(c *gin.Context) {
@@ -35,7 +34,7 @@ func MakeHandlerPost(s *Service) func(c *gin.Context) {
 		if frombrowser {
 			var errorMsg string
 			if err != nil {
-				errorMsg = "?error="+err.Error()
+				errorMsg = "?error=" + err.Error()
 			}
 			http.Redirect(c.Writer, c.Request, "/tasks"+errorMsg, http.StatusSeeOther)
 		} else {

@@ -5,12 +5,11 @@ import (
 
 	stderrors "errors"
 
-	l "github.com/Mur466/distribcalc/v2/internal/logger"
+	l "github.com/Mur466/distribcalc2/internal/logger"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 	"go.uber.org/zap"
 )
-
 
 func (s *StoragePg) AddTokenToBL(token string) {
 	/*
@@ -54,8 +53,8 @@ func (s *StoragePg) IsBlacklisted(token string) bool {
 			return false
 		} else {
 			l.Logger.Error("Error on select from TOKENBL",
-			zap.String("error", err.Error()),
-			zap.String("token", string(token)),
+				zap.String("error", err.Error()),
+				zap.String("token", string(token)),
 			)
 			return true // в случае сбоя лучше не дадим  доступ хорошему, чем пропустим плохого
 		}

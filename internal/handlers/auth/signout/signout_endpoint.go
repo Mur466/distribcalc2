@@ -3,7 +3,8 @@ package signout
 import (
 	"net/http"
 	"strings"
-	l "github.com/Mur466/distribcalc/v2/internal/logger"
+
+	l "github.com/Mur466/distribcalc2/internal/logger"
 	"github.com/gin-gonic/gin"
 )
 
@@ -25,7 +26,7 @@ func MakeHandlerGet(s *Service) func(c *gin.Context) {
 			}
 		}
 
-		l.SLogger.Infof("Log out user %v",c.GetString("Username"))
+		l.SLogger.Infof("Log out user %v", c.GetString("Username"))
 		s.Do(tokenString)
 		if frombrowser {
 			c.HTML(http.StatusOK, "signin.html", gin.H{})

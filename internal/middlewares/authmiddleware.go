@@ -1,24 +1,20 @@
 package middlewares
 
 import (
-
 	"fmt"
 	"net/http"
 	"strings"
 
-	"github.com/Mur466/distribcalc/v2/internal/entities"
-	l "github.com/Mur466/distribcalc/v2/internal/logger"
+	"github.com/Mur466/distribcalc2/internal/entities"
+	l "github.com/Mur466/distribcalc2/internal/logger"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
-
 )
 
 type Repo interface {
 	IsBlacklisted(token string) bool
-	GetUser(Username string) *entities.User 
+	GetUser(Username string) *entities.User
 }
-
-
 
 func AuthMiddleware(secret string, repo Repo) gin.HandlerFunc {
 	return func(c *gin.Context) {

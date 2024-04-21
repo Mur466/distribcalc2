@@ -4,9 +4,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Mur466/distribcalc/v2/internal/cfg"
-	l "github.com/Mur466/distribcalc/v2/internal/logger"
-	"github.com/Mur466/distribcalc/v2/internal/task"
+	"github.com/Mur466/distribcalc2/internal/cfg"
+	l "github.com/Mur466/distribcalc2/internal/logger"
+	"github.com/Mur466/distribcalc2/internal/task"
 	"go.uber.org/zap"
 )
 

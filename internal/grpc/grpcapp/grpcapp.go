@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/Mur466/distribcalc/v2/internal/cfg"
-	"github.com/Mur466/distribcalc/v2/internal/grpc/mathoper_grpc"
-	l "github.com/Mur466/distribcalc/v2/internal/logger"
-	pb "github.com/Mur466/distribcalc/v2/proto"
+	"github.com/Mur466/distribcalc2/internal/cfg"
+	"github.com/Mur466/distribcalc2/internal/grpc/mathoper_grpc"
+	l "github.com/Mur466/distribcalc2/internal/logger"
+	pb "github.com/Mur466/distribcalc2/proto"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapgrpc"
 	"google.golang.org/grpc"
@@ -16,9 +16,8 @@ import (
 
 type grpcApp struct {
 	gRPCServer *grpc.Server
-	addr string
+	addr       string
 }
-
 
 func New(
 	cfg *cfg.Config,
@@ -29,14 +28,13 @@ func New(
 	addr := fmt.Sprintf("%s:%v", host, cfg.GrpcPort)
 	// создадим сервер grpc
 	grpcServer := grpc.NewServer()
-	// объект структуры, которая содержит реализацию 
+	// объект структуры, которая содержит реализацию
 	// серверной части MathOper
 	mathOperServiceServer := mathoper_grpc.NewServer()
 	// зарегистрируем нашу реализацию сервера
 	pb.RegisterMathOperServiceServer(grpcServer, mathOperServiceServer)
 
 	return &grpcApp{addr: addr, gRPCServer: grpcServer}
-
 
 }
 
@@ -53,12 +51,11 @@ func (a *grpcApp) Run() error {
 	// запустим grpc сервер
 	l.Logger.Info("starting grpc serve... ")
 	if err := a.gRPCServer.Serve(lis); err != nil {
-		l.Logger.Error("error serving grpc",  zap.Error(err))
+		l.Logger.Error("error serving grpc", zap.Error(err))
 		return err
 	}
 	return nil
 }
-
 
 // MustRun runs gRPC server and panics if any error occurs.
 func (a *grpcApp) MustRun() {

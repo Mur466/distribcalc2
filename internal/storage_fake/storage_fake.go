@@ -3,7 +3,7 @@ package storage_fake
 import (
 	"sync"
 
-	"github.com/Mur466/distribcalc/v2/internal/entities"
+	"github.com/Mur466/distribcalc2/internal/entities"
 	"golang.org/x/crypto/bcrypt"
 )
 

@@ -1,6 +1,6 @@
 syntax = "proto3"; // версия proto файлов
 package mathoper; // название пакета
-option go_package = "github.com/Mur466/distribcalc/v2/proto";
+option go_package = "github.com/Mur466/distribcalc2/proto";
 
 
 // Сообщение - запрос от агента на получение новой операции

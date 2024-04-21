@@ -3,8 +3,8 @@ package signin
 import (
 	"net/http"
 
-	"github.com/Mur466/distribcalc/v2/internal/errors"
-	l "github.com/Mur466/distribcalc/v2/internal/logger"
+	"github.com/Mur466/distribcalc2/internal/errors"
+	l "github.com/Mur466/distribcalc2/internal/logger"
 	"github.com/gin-gonic/gin"
 )
 

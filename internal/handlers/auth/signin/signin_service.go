@@ -3,10 +3,10 @@ package signin
 import (
 	"time"
 
-	"github.com/Mur466/distribcalc/v2/internal/cfg"
-	"github.com/Mur466/distribcalc/v2/internal/entities"
-	"github.com/Mur466/distribcalc/v2/internal/errors"
-	l "github.com/Mur466/distribcalc/v2/internal/logger"
+	"github.com/Mur466/distribcalc2/internal/cfg"
+	"github.com/Mur466/distribcalc2/internal/entities"
+	"github.com/Mur466/distribcalc2/internal/errors"
+	l "github.com/Mur466/distribcalc2/internal/logger"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -53,31 +53,31 @@ func (s *Service) GetJWTtoken(username string) (string, error) {
 	now := time.Now()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"username": username,
-		"nbf":      now.Unix(), // время, с которого токен станет валидным, пример now.Add(1*time.Minute).Unix()
+		"nbf":      now.Unix(),                                                 // время, с которого токен станет валидным, пример now.Add(1*time.Minute).Unix()
 		"exp":      now.Add(time.Duration(s.cfg.AuthTTL) * time.Second).Unix(), // время, с которого токен перестанет быть валидным ("протухнет")
-		"iat":      now.Unix(), // время создания токена
+		"iat":      now.Unix(),                                                 // время создания токена
 	})
 
 	tokenString, err := token.SignedString([]byte(s.cfg.Secret))
 	return tokenString, err
 
 	/*  пример проверки токена
-		tokenFromString, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-				return "", fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
-			}
-
-			return []byte(hmacSampleSecret), nil
-		})
-
-		if err != nil {
-			l.SLogger.Fatal(err)
+	tokenFromString, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return "", fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 
-		if claims, ok := tokenFromString.Claims.(jwt.MapClaims); ok {
-			fmt.Println("user name: ", claims["username"])
-		} else {
-			panic(err)
-		}
+		return []byte(hmacSampleSecret), nil
+	})
+
+	if err != nil {
+		l.SLogger.Fatal(err)
+	}
+
+	if claims, ok := tokenFromString.Claims.(jwt.MapClaims); ok {
+		fmt.Println("user name: ", claims["username"])
+	} else {
+		panic(err)
+	}
 	*/
 }

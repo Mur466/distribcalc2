@@ -3,15 +3,15 @@ package storage_pg
 import (
 	"context"
 
-	"github.com/Mur466/distribcalc/v2/internal/entities"
-	l "github.com/Mur466/distribcalc/v2/internal/logger"
+	"github.com/Mur466/distribcalc2/internal/entities"
+	l "github.com/Mur466/distribcalc2/internal/logger"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
-    "github.com/jackc/pgx/v5"
 
-	"go.uber.org/zap"
-	"github.com/Mur466/distribcalc/v2/internal/errors"
 	stderrors "errors"
 
+	"github.com/Mur466/distribcalc2/internal/errors"
+	"go.uber.org/zap"
 )
 
 type Users map[int]entities.User
@@ -28,8 +28,8 @@ func (s *StoragePg) GetUser(Username string) *entities.User {
 			return nil
 		} else {
 			l.Logger.Error("Error on select from USERS",
-			zap.String("error", err.Error()),
-			zap.String("username", string(u.Username)),
+				zap.String("error", err.Error()),
+				zap.String("username", string(u.Username)),
 			)
 			return nil
 		}
@@ -48,8 +48,8 @@ func (s *StoragePg) AddUser(u *entities.User) (int, error) {
 		var pgerr *pgconn.PgError
 		if stderrors.As(err, &pgerr) && pgerr.ConstraintName == "users_username_uk" {
 			l.Logger.Info("Attempt to insert duplicate user into USERS",
-			zap.String("username", string(u.Username)),
-		)
+				zap.String("username", string(u.Username)),
+			)
 			return 0, errors.ErrDuplicateUsername
 		}
 		l.Logger.Error("Error on insert to USERS",
@@ -61,4 +61,3 @@ func (s *StoragePg) AddUser(u *entities.User) (int, error) {
 	}
 	return newid, nil
 }
-

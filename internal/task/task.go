@@ -10,28 +10,28 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Mur466/distribcalc/v2/internal/cfg"
-	l "github.com/Mur466/distribcalc/v2/internal/logger"
+	"github.com/Mur466/distribcalc2/internal/cfg"
+	l "github.com/Mur466/distribcalc2/internal/logger"
 	"go.uber.org/zap"
 )
 
 type Node struct {
-	Node_id        int 
+	Node_id        int
 	Task_id        int
 	Parent_node_id int
 	Child1_node_id int
 	Child2_node_id int
-	Operand1       int    
-	Operand2       int    
-	Operator       string 
-	Operator_delay int    
-	Status         string  // (parsing, "error", waiting - ждем результатов других выражений, ready - оба операнда вычислены, in progress - передано в расчет, done - есть результат)
-	Message        string 
+	Operand1       int
+	Operand2       int
+	Operator       string
+	Operator_delay int
+	Status         string // (parsing, "error", waiting - ждем результатов других выражений, ready - оба операнда вычислены, in progress - передано в расчет, done - есть результат)
+	Message        string
 	Date_ins       time.Time
 	Date_start     time.Time
 	Date_done      time.Time
-	Agent_id       string 
-	Result         int64  
+	Agent_id       string
+	Result         int64
 }
 
 type NodeStatusInfo struct {

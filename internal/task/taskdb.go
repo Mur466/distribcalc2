@@ -7,8 +7,8 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/Mur466/distribcalc/v2/internal/db"
-	l "github.com/Mur466/distribcalc/v2/internal/logger"
+	"github.com/Mur466/distribcalc2/internal/db"
+	l "github.com/Mur466/distribcalc2/internal/logger"
 )
 
 // атомарно выбираем ожидающую операцию и переводим ее в процесс, а также и task, если нужно

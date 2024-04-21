@@ -6,10 +6,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/Mur466/distribcalc/v2/internal/agent"
-	"github.com/Mur466/distribcalc/v2/internal/cfg"
-	"github.com/Mur466/distribcalc/v2/internal/task"
-	"github.com/Mur466/distribcalc/v2/internal/utils"
+	"github.com/Mur466/distribcalc2/internal/agent"
+	"github.com/Mur466/distribcalc2/internal/cfg"
+	"github.com/Mur466/distribcalc2/internal/task"
+	"github.com/Mur466/distribcalc2/internal/utils"
 )
 
 func GetAgents(c *gin.Context) {

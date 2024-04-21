@@ -1,9 +1,8 @@
 package storage_fake
 
 import (
-	"github.com/Mur466/distribcalc/v2/internal/entities"
-	"github.com/Mur466/distribcalc/v2/internal/errors"
-
+	"github.com/Mur466/distribcalc2/internal/entities"
+	"github.com/Mur466/distribcalc2/internal/errors"
 )
 
 type Users map[int]entities.User

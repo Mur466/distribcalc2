@@ -1,6 +1,6 @@
 package entities
 
-import "github.com/Mur466/distribcalc/v2/internal/errors"
+import "github.com/Mur466/distribcalc2/internal/errors"
 
 type User struct {
 	Id       int
